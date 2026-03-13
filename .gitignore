@@ -1,1 +1,8 @@
 .env
+data/
+/data
+data
+
+embeddings/
+*.pkl
+.env
