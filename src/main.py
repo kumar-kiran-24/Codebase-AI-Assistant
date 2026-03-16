@@ -21,6 +21,10 @@ class Main:
         docs=self.dataloader.data_loader(path=path)
         chunks=self.datasplitter.dataSplitter(docs=docs)
         self.embedding_path=self.dataembedder.data_embedder(docs=chunks)
+    def upload_folder(self,path):
+        docs=self.dataloader.data_loader(path=path)
+        chunks=self.datasplitter.dataSplitter(docs=docs)
+        self.embedding_path=self.dataembedder.data_embedder(docs=chunks)
     
     def data_loader(self,question):
         self.embedding_path="embeddings"

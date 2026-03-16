@@ -48,6 +48,7 @@ class Bot:
 
 
     def initate_bot(self,question,session_id,context):
+        print("bot initate will start ")
         model=self.llm
         prompt=self.prompt
 
@@ -80,6 +81,8 @@ class Bot:
         response=self.bot.invoke({"question":question,"context":self.saved_context},
                                  config={"configurable":{"session_id":self.session_id}}
                                  )
+        
+        print(response.content)
         return response.content
     
 

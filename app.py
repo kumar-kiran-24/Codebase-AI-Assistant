@@ -1,11 +1,22 @@
 from fastapi import FastAPI,UploadFile,File
 from pydantic import BaseModel
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.main import Main
 from src.components.bot import Bot
 
 app = FastAPI()
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*" ] , 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 from pathlib import Path
 import shutil
@@ -64,6 +75,8 @@ async def upload_file(file:UploadFile=File(...)):
     with zipfile.ZipFile(zip_path,"r") as zip_ref:
         zip_ref.extractall(UPLOAD_DIR)
     
+    main.upload_folder(path=UPLOAD_DIR)
+    
 
     return{
         "messages":"Project uploades sucesfully",
@@ -85,6 +98,7 @@ async def upload_files(files: List[UploadFile] = File(...)):
 
         with open(file_location, "wb") as f:
             f.write(await file.read())
+    
 
     return {"message": "Files uploaded"}
 
