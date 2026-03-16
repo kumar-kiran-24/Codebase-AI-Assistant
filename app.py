@@ -1,20 +1,94 @@
+from fastapi import FastAPI,UploadFile,File
+from pydantic import BaseModel
+import uvicorn
+
 from src.main import Main
 from src.components.bot import Bot
 
+app = FastAPI()
+
+from pathlib import Path
+import shutil
+import zipfile
+
+class UserRequest(BaseModel):
+    url: str
+
+class Chat(BaseModel):
+    question:str
+    session_id:str
+
+
+
+main=Main()
+bot=Bot()
+
+@app.post("/upload")
+def upload(user: UserRequest):
+
+    repo_url = user.url
+    main.initate_main(url=repo_url)
+
+@app.post("/chat")
+def chat(user:Chat):
+    question=user.question
+    session_id=user.session_id
+
+    print("start")
+
+    context=main.data_loader(question=question)
+    print("question i there in teh router ")
+
+    reposne=bot.initate_bot(question=question,session_id=session_id,context=context)
+
+    print(reposne)
+
+    return {
+        "message":reposne
+    }
+
+UPLOAD_DIR=Path("data/repo2")
+
+@app.post("/upload-project")
+async def upload_file(file:UploadFile=File(...)):
+    zip_path=UPLOAD_DIR.with_suffix(".zip")
+
+    with open(zip_path,"wb") as f:
+        shutil.copyfileobj(file.file,f)
+    
+    if UPLOAD_DIR.exists():
+        shutil.rmtree(UPLOAD_DIR)
+    
+    UPLOAD_DIR.mkdir(parents=True)
+
+    with zipfile.ZipFile(zip_path,"r") as zip_ref:
+        zip_ref.extractall(UPLOAD_DIR)
+    
+
+    return{
+        "messages":"Project uploades sucesfully",
+        "path":str(UPLOAD_DIR)
+    }
+
+
+
+from typing import List
+
+@app.post("/upload-files")
+async def upload_files(files: List[UploadFile] = File(...)):
+
+    save_path = Path("data/project")
+    save_path.mkdir(parents=True, exist_ok=True)
+
+    for file in files:
+        file_location = save_path / file.filename
+
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+
+    return {"message": "Files uploaded"}
+
+
 if __name__=="__main__":
-    print("started")
-    ma=Main()
-    bot=Bot()
+    uvicorn.run("app:app",reload=True)
 
-
-    def ask(question):
-        print("say your question")
-        
-        context=ma.data_loader(question=question)
-
-        res=bot.initate_bot(question=question,context=context,session_id="1")
-        return res
-
-    question=input("enter the question :")
-    res=ask(question=question)
-    print(res)
