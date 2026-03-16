@@ -11,15 +11,11 @@ class DataSplitter:
 
     def dataSplitter(self,docs):
 
-        splitter=RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=50
-        )
-        docs=docs
+        
 
 
         splitter = RecursiveCharacterTextSplitter(
-            chunk_size=600,
+            chunk_size=2000,
             chunk_overlap=100
         )
 

@@ -35,20 +35,12 @@ class Main:
             allow_dangerous_deserialization=True
         )
 
-        results=db.similarity_search(query=question,k=3)
+        results=db.similarity_search(query=question,k=5)
         print(results)
         
         return results
     
 
-if __name__=="__main__":
-    main=Main()
-
-    main.data_loader(question="code for the ragchatbot",url="https://github.com/kumar-kiran-24/EDWINNOVA-CHATBOT")
-
-        
-
-    
     
 
 

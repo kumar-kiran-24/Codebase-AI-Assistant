@@ -98,11 +98,10 @@ async def upload_files(files: List[UploadFile] = File(...)):
 
         with open(file_location, "wb") as f:
             f.write(await file.read())
-    
-
+    main.upload_folder(path=save_path)
     return {"message": "Files uploaded"}
 
 
 if __name__=="__main__":
-    uvicorn.run("app:app",reload=True)
+    uvicorn.run("app:app",reload=True,port=8000)
 

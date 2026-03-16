@@ -32,8 +32,6 @@ class DataEmbedder:
 
         db.save_local(str(self.save))
 
-        print(f"Embeddings saved at: {self.save}")
-
         return self.save
 
 

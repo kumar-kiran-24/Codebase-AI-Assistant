@@ -14,7 +14,6 @@ class DataDownloader:
 
         # delete repo if it already exists
         if path.exists():
-            print("Old repository found. Deleting it...")
             shutil.rmtree(path)
 
         # clone the repository

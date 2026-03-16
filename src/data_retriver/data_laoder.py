@@ -6,7 +6,10 @@ class DataLoader:
 
     def data_loader(self,path):
         repo_path = path
-        extensions = ["*.py", "*.js", "*.ts", "*.java", "*.cpp", "*.md", "*.json"]
+        extensions = [  "*.py", "*.js", "*.ts", "*.tsx", "*.jsx",
+            "*.java", "*.cpp", "*.c", "*.go", "*.rb",
+            "*.php", "*.json", "*.yaml", "*.yml",
+            "*.md", "*.txt", "*.html", "*.css","*.ipynb"]
 
         documents = []
 
