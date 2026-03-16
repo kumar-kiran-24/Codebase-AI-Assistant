@@ -1,0 +1,13 @@
+.env
+
+*.pkl
+.env
+
+.vscode
+
+data/
+embeddings/
+*.faiss
+__pycache__/
+*.pyc
+.git
