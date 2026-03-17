@@ -5,26 +5,31 @@ class DataLoader:
         pass
 
     def data_loader(self,path):
-        repo_path = path
-        extensions = [  "*.py", "*.js", "*.ts", "*.tsx", "*.jsx",
-            "*.java", "*.cpp", "*.c", "*.go", "*.rb",
-            "*.php", "*.json", "*.yaml", "*.yml",
-            "*.md", "*.txt", "*.html", "*.css","*.ipynb"]
+        try:
+            repo_path = path
+            extensions = [  "*.py", "*.js", "*.ts", "*.tsx", "*.jsx",
+                "*.java", "*.cpp", "*.c", "*.go", "*.rb",
+                "*.php", "*.json", "*.yaml", "*.yml",
+                "*.md", "*.txt", "*.html", "*.css","*.ipynb"]
 
-        documents = []
+            documents = []
 
-        for ext in extensions:
-            loader = DirectoryLoader(
-                repo_path,
-                glob=f"**/{ext}",
-                loader_cls=TextLoader,
-                loader_kwargs={
-                    "encoding": "utf-8",
-                    "autodetect_encoding": True
-                },
-                show_progress=True
-            )
+            for ext in extensions:
+                loader = DirectoryLoader(
+                    repo_path,
+                    glob=f"**/{ext}",
+                    loader_cls=TextLoader,
+                    loader_kwargs={
+                        "encoding": "utf-8",
+                        "autodetect_encoding": True
+                    },
+                    show_progress=True
+                )
 
-            documents.extend(loader.load())
+                documents.extend(loader.load())
+        except Exception as e:
+            return {
+                "error":e
+            }
         
         return documents

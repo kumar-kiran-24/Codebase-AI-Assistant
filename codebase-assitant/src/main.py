@@ -5,6 +5,13 @@ from src.data_retriver.repodownolader import DataDownloader
 
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_qdrant import Qdrant
+from qdrant_client import QdrantClient
+from langchain_qdrant import QdrantVectorStore
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Main:
     datadwnloader=DataDownloader()
@@ -37,28 +44,39 @@ class Main:
             return{
                 "error":e
             }
-        
+    
 
-    def data_loader(self,question):
+    def data_loader(self, question):
         try:
-
-            self.embedding_path="embeddings"
-            
-            db=FAISS.load_local(
-                self.embedding_path,
-                embeddings=self.embeddings,
-                allow_dangerous_deserialization=True
+            client = QdrantClient(
+                url=os.getenv("QDRANT_URL"),
+                api_key=os.getenv("QDRANT_API_KEY"),
+                check_compatibility=False
             )
 
-            results=db.similarity_search(query=question,k=5)
-        
-            
-            return results
+            vectorstore = QdrantVectorStore(
+                client=client,
+                collection_name="codebase",
+                embedding=self.embeddings
+            )
+
+            docs = vectorstore.similarity_search(question, k=5)
+
+            print("Retrieved docs:", len(docs))
+
+            context = "\n\n".join([
+                f"FILE: {doc.metadata.get('source')}\n{doc.page_content}"
+                for doc in docs
+            ])
+
+
+
+            return context
+
         except Exception as e:
-            return {
-                "error":e
-            }
-        
+            print("ERROR:", e)
+            return "Error retrieving context"
+            
 
     
 

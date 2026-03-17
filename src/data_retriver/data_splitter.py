@@ -10,19 +10,21 @@ class DataSplitter:
 
 
     def dataSplitter(self,docs):
+        try:
 
-        
+            splitter = RecursiveCharacterTextSplitter(
+                chunk_size=2000,
+                chunk_overlap=100
+            )
+
+            chunks = splitter.split_documents(docs)
 
 
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=2000,
-            chunk_overlap=100
-        )
-
-        chunks = splitter.split_documents(docs)
-
-        print("Total chunks:", len(chunks))
-        return chunks
+            return chunks
+        except Exception as e:
+            return {
+                "error":e
+            }
 
         
 

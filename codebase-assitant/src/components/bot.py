@@ -15,36 +15,51 @@ class Bot:
     def __init__(self):
         api_key=os.getenv("GROQ_API")
         self.llm=ChatGroq(model="llama-3.1-8b-instant",api_key=api_key)
-        self.prompt = ChatPromptTemplate.from_messages([
-                            (
-                                "system",
+        self.prompt =ChatPromptTemplate.from_messages([
+                                    (
+                                        "system",
+                                        """
+                                You are an expert AI Codebase Assistant.
+
+                                You are given code from a repository. Your job is to answer questions ONLY using the provided context.
+
+                                STRICT RULES:
+                                - DO NOT guess or assume anything
+                                - DO NOT say "it appears", "might be", or "probably"
+                                - If the answer is not in the context, respond EXACTLY:
+                                "Not found in the codebase."
+
+                                ANSWER REQUIREMENTS:
+                                - Always mention the file name(s)
+                                - Explain clearly and technically
+                                - Refer to actual code logic
+                                - Be concise but informative
+
+                                OUTPUT FORMAT:
+
+                                File: <file_name>
+
+                                Explanation:
+                                <clear explanation of what the code does>
+
+                                Code Reference:
+                                <relevant snippet or description>
+
+                                If multiple files are involved, list each separately.
                                 """
-                        You are a helpful AI Codebase Assistant.
+                                    ),
+                                    MessagesPlaceholder(variable_name="history"),
+                                    (
+                                        "human",
+                                        """
+                                Context:
+                                {context}
 
-                        You are given the contents of a GitHub repository or project folder.
-                        The context contains code files, folders, and documentation from that project.
-
-                        Your job is to:
-                        - Understand the repository structure and code.
-                        - Answer the user's questions based on the provided context.
-                        - Explain code clearly when asked.
-                        - If the answer is not present in the context, say that the information is not available in the repository.
-
-                        Always base your answers primarily on the provided context.
-                        """
-                            ),
-                            MessagesPlaceholder(variable_name="history"),
-                            (
-                                "human",
+                                Question:
+                                {question}
                                 """
-                        Context:
-                        {context}
-
-                        Question:
-                        {question}
-                        """
-                            )
-                        ])
+                                    )
+                                ])
 
 
     def initate_bot(self,question,session_id,context):

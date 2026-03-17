@@ -22,3 +22,5 @@ tqdm
 python-multipart
 chardet
 pydantic
+qdrant-client
+langchain-qdrant

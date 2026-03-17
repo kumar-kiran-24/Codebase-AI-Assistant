@@ -42,10 +42,9 @@ def chat(user:Chat):
     question=user.question
     session_id=user.session_id
 
-    print("start")
 
     context=main.data_loader(question=question)
-    print("question i there in teh router ")
+
 
     reposne=bot.initate_bot(question=question,session_id=session_id,context=context)
 
@@ -55,11 +54,11 @@ def chat(user:Chat):
         "message":reposne
     }
 
-UPLOAD_DIR=Path("data/repo2")
+UPLOAD_DIR = Path("/tmp/repo2")
 
 @app.post("/upload-project")
 async def upload_file(file:UploadFile=File(...)):
-    zip_path=UPLOAD_DIR.with_suffix(".zip")
+    zip_path = Path("/tmp/repo2.zip")
 
     with open(zip_path,"wb") as f:
         shutil.copyfileobj(file.file,f)

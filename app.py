@@ -2,13 +2,12 @@ from fastapi import FastAPI,UploadFile,File
 from pydantic import BaseModel
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List
 
 from src.main import Main
 from src.components.bot import Bot
 
 app = FastAPI()
-
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,8 +28,6 @@ class Chat(BaseModel):
     question:str
     session_id:str
 
-
-
 main=Main()
 bot=Bot()
 
@@ -45,10 +42,9 @@ def chat(user:Chat):
     question=user.question
     session_id=user.session_id
 
-    print("start")
 
     context=main.data_loader(question=question)
-    print("question i there in teh router ")
+
 
     reposne=bot.initate_bot(question=question,session_id=session_id,context=context)
 
@@ -58,11 +54,11 @@ def chat(user:Chat):
         "message":reposne
     }
 
-UPLOAD_DIR=Path("data/repo2")
+UPLOAD_DIR = Path("/tmp/repo2")
 
 @app.post("/upload-project")
 async def upload_file(file:UploadFile=File(...)):
-    zip_path=UPLOAD_DIR.with_suffix(".zip")
+    zip_path = Path("/tmp/repo2.zip")
 
     with open(zip_path,"wb") as f:
         shutil.copyfileobj(file.file,f)
@@ -83,9 +79,6 @@ async def upload_file(file:UploadFile=File(...)):
         "path":str(UPLOAD_DIR)
     }
 
-
-
-from typing import List
 
 @app.post("/upload-files")
 async def upload_files(files: List[UploadFile] = File(...)):

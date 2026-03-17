@@ -20,18 +20,24 @@ class DataEmbedder:
         )
 
     def data_embedder(self, docs):
+        try:
+            print("Docs count:", len(docs))
 
-        print("Initializing embeddings...")
+            print("Initializing embeddings...")
 
-        self.save.mkdir(parents=True, exist_ok=True)
+            self.save.mkdir(parents=True, exist_ok=True)
 
-        db = FAISS.from_documents(
-            docs,
-            self.embeddings_model
-        )
+            db = FAISS.from_documents(
+                docs,
+                self.embeddings_model
+            )
 
-        db.save_local(str(self.save))
+            db.save_local(str(self.save))
 
-        return self.save
+            return self.save
+        except Exception as e:
+            return {
+                "error":e
+            }
 
 

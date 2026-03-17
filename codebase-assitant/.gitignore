@@ -11,3 +11,13 @@ embeddings/
 __pycache__/
 *.pyc
 .git
+
+embeddings/
+*.faiss
+data/
+__pycache__/
+*.pyc
+.git
+
+tmp/
+tmp

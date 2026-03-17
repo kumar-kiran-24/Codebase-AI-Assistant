@@ -1,16 +1,83 @@
+import os
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 
 class DataLoader:
     def __init__(self):
-        pass
+        self.ignore_files = [
+            "pnpm-lock.yaml",
+            "package-lock.json",
+            "yarn.lock"
+        ]
 
-    def data_loader(self,path):
+        self.ignore_folders = [
+            "node_modules",
+            ".next",
+            "dist",
+            "build",
+            "__pycache__",
+            ".git"
+        ]
+
+    def should_include(self, file_path):
+    
+        if any(folder in file_path for folder in self.ignore_folders):
+            return False
+
+      
+        if os.path.basename(file_path) in self.ignore_files:
+            return False
+
+        return True
+
+    def data_loader(self, path):
         try:
             repo_path = path
-            extensions = [  "*.py", "*.js", "*.ts", "*.tsx", "*.jsx",
-                "*.java", "*.cpp", "*.c", "*.go", "*.rb",
-                "*.php", "*.json", "*.yaml", "*.yml",
-                "*.md", "*.txt", "*.html", "*.css","*.ipynb"]
+
+            extensions = [
+                    
+                        "*.py",
+
+
+                        "*.js", "*.ts", "*.jsx", "*.tsx", "*.mjs", "*.cjs",
+
+                    
+                        "*.java", "*.kt", "*.kts",
+
+                        
+                        "*.c", "*.cpp", "*.h", "*.hpp",
+
+                    
+                        "*.cs",
+
+                    
+                        "*.go",
+
+                    
+                        "*.rs",
+
+                    
+                        "*.rb",
+
+                        
+                        "*.php",
+
+                    
+                        "*.swift",
+
+                    
+                        "*.dart",
+
+                        "*.sh", "*.bash", "*.zsh",
+
+                    
+                        "*.dockerfile", "Dockerfile", "*.tf",
+
+                        # 📄 Config (important but controlled)
+                        "*.json", "*.yaml", "*.yml",
+
+                        # 📝 Docs (optional but useful)
+                        "*.md"
+                    ]
 
             documents = []
 
@@ -26,10 +93,18 @@ class DataLoader:
                     show_progress=True
                 )
 
-                documents.extend(loader.load())
+                loaded_docs = loader.load()
+
+                # FILTER HERE
+                for doc in loaded_docs:
+                    source = doc.metadata.get("source", "")
+
+                    if not self.should_include(source):
+                        continue
+
+                    documents.append(doc)
+
         except Exception as e:
-            return {
-                "error":e
-            }
-        
+            return {"error": e}
+
         return documents
