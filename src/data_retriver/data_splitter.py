@@ -19,6 +19,8 @@ class DataSplitter:
 
             chunks = splitter.split_documents(docs)
 
+        
+
 
             return chunks
         except Exception as e:

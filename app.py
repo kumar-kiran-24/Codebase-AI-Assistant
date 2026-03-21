@@ -94,6 +94,12 @@ async def upload_files(files: List[UploadFile] = File(...)):
     main.upload_folder(path=save_path)
     return {"message": "Files uploaded"}
 
+@app.get("/")
+def home():
+    return{
+        "status":"running"
+    }
+
 
 if __name__=="__main__":
     uvicorn.run("app:app",reload=True,port=8000)

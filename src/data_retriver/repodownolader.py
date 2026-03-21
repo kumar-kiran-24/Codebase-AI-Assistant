@@ -9,7 +9,7 @@ class DataDownloader:
         try:
 
 
-            path = Path("data/repo")
+            path = Path("/tmp/data")
 
             # create parent directory
             path.parent.mkdir(parents=True, exist_ok=True)

@@ -78,3 +78,11 @@ cd Codebase-AI-Assistant
 pip install -r requirements.txt
 
 ```
+
+## Environment Variables(.env)
+```
+QDRANT_URL=your_qdrant_url
+QDRANT_API_KEY=your_api_key
+GROQ_API=your_groq_api_key
+
+```

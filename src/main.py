@@ -3,7 +3,7 @@ from src.data_retriver.data_splitter import DataSplitter
 from src.data_retriver.dataembedder import DataEmbedder
 from src.data_retriver.repodownolader import DataDownloader
 
-
+from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import Qdrant
 from qdrant_client import QdrantClient
